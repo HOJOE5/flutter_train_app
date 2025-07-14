@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_train_app/pages/seat/seat_page.dart';
 import '../station_list/station_list_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -67,7 +68,16 @@ class _HomePageState extends State<HomePage> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: (_departure != null && _arrival != null)
-                    ? () => Navigator.pushNamed(context, '/seat')
+                    ? () {
+                        Navigator.pushNamed(
+                          context,
+                          SeatPage.routeName,
+                          arguments: {
+                            'departure': _departure!,
+                            'arrival': _arrival!,
+                          },
+                        );
+                      }
                     : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
