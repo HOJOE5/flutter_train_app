@@ -55,23 +55,25 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
+      body: Container(
+        color: Colors.grey[400],
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              const SizedBox(height: 40),
 
-            Spacer(),
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: colorScheme.onSurface.withAlpha(150)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              Spacer(),
+              Container(
+                width: double.infinity,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: colorScheme.surface,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: colorScheme.onSurface.withAlpha(150),
+                  ),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -86,14 +88,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-
-                    Expanded(
-                      child: Center(
-                        child: Container(
-                          width: 2,
-                          height: 50,
-                          color: colorScheme.onSurface.withAlpha(150),
-                        ),
+                    //구분선
+                    Center(
+                      child: Container(
+                        width: 2,
+                        height: 50,
+                        color: Colors.grey[400],
                       ),
                     ),
 
@@ -110,42 +110,42 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 40),
-            SizedBox(
-              height: 50,
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: (_departure != null && _arrival != null)
-                    ? () {
-                        Navigator.pushNamed(
-                          context,
-                          SeatPage.routeName,
-                          arguments: {
-                            'departure': _departure!,
-                            'arrival': _arrival!,
-                          },
-                        );
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+              const SizedBox(height: 40),
+              SizedBox(
+                height: 50,
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: (_departure != null && _arrival != null)
+                      ? () {
+                          Navigator.pushNamed(
+                            context,
+                            SeatPage.routeName,
+                            arguments: {
+                              'departure': _departure!,
+                              'arrival': _arrival!,
+                            },
+                          );
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  '좌석 선택',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                  child: const Text(
+                    '좌석 선택',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 300),
-          ],
+              SizedBox(height: 300),
+            ],
+          ),
         ),
       ),
     );
@@ -174,18 +174,11 @@ class _StationBox extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: colorScheme.onSurface.withAlpha(150),
+              color: Colors.grey,
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            stationName,
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.normal,
-              color: colorScheme.onSurface,
-            ),
-          ),
+          Text(stationName, style: TextStyle(fontSize: 40)),
         ],
       ),
     );
