@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/theme_provider.dart';
 import 'package:flutter_train_app/pages/seat/seat_page.dart';
 import '../station_list/station_list_page.dart';
 
@@ -33,34 +35,81 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.isDarkMode;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: colorScheme.surface,
+      appBar: AppBar(
+        title: Text('기차 예매', style: TextStyle(color: colorScheme.onSurface)),
+        backgroundColor: colorScheme.surface,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(
+              isDark ? Icons.light_mode : Icons.dark_mode,
+              color: colorScheme.onSurface,
+            ),
+            onPressed: () => themeProvider.toggleTheme(),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const SizedBox(height: 60),
-            const Text('기차 예매', style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 40),
+
             Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () => _selectStation(true),
-                  child: _StationBox(
-                    title: '출발역',
-                    stationName: _departure ?? '선택',
-                  ),
+            Container(
+              width: double.infinity,
+              height: 200,
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: colorScheme.onSurface.withAlpha(150)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _selectStation(true),
+                        child: _StationBox(
+                          title: '출발역',
+                          stationName: _departure ?? '선택',
+                          colorScheme: colorScheme,
+                        ),
+                      ),
+                    ),
+
+                    Expanded(
+                      child: Center(
+                        child: Container(
+                          width: 2,
+                          height: 50,
+                          color: colorScheme.onSurface.withAlpha(150),
+                        ),
+                      ),
+                    ),
+
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _selectStation(false),
+                        child: _StationBox(
+                          title: '도착역',
+                          stationName: _arrival ?? '선택',
+                          colorScheme: colorScheme,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () => _selectStation(false),
-                  child: _StationBox(
-                    title: '도착역',
-                    stationName: _arrival ?? '선택',
-                  ),
-                ),
-              ],
+              ),
             ),
             const SizedBox(height: 40),
             SizedBox(
@@ -106,36 +155,35 @@ class _HomePageState extends State<HomePage> {
 class _StationBox extends StatelessWidget {
   final String title;
   final String stationName;
+  final ColorScheme colorScheme;
 
-  const _StationBox({required this.title, required this.stationName});
+  const _StationBox({
+    required this.title,
+    required this.stationName,
+    required this.colorScheme,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
-      width: 150,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.grey,
+              color: colorScheme.onSurface.withAlpha(150),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             stationName,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.normal,
-              color: Colors.black,
+              color: colorScheme.onSurface,
             ),
           ),
         ],

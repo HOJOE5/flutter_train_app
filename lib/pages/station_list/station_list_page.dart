@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/theme_provider.dart';
 
 class StationListPage extends StatelessWidget {
   static const String routeName = '/station_list';
@@ -10,6 +12,10 @@ class StationListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = isDeparture ? '출발역' : '도착역';
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.isDarkMode;
+    final colorScheme = Theme.of(context).colorScheme;
+
     const List<String> stationList = [
       '수서',
       '동탄',
@@ -26,10 +32,19 @@ class StationListPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title, style: const TextStyle(color: Colors.black)),
-        iconTheme: const IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
+        title: Text(title, style: TextStyle(color: colorScheme.onSurface)),
+        iconTheme: IconThemeData(color: colorScheme.onSurface),
+        backgroundColor: colorScheme.surface,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(
+              isDark ? Icons.light_mode : Icons.dark_mode,
+              color: colorScheme.onSurface,
+            ),
+            onPressed: () => themeProvider.toggleTheme(),
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: stationList.length,
@@ -38,7 +53,11 @@ class StationListPage extends StatelessWidget {
           return ListTile(
             title: Text(
               station,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface,
+              ),
             ),
             onTap: () {
               Navigator.pop(context, {
