@@ -30,9 +30,69 @@ class _SeatPageState extends State<SeatPage> {
       _seatSelected.any((row) => row.any((selected) => selected == true));
 
   void _confirmBooking() {
+    // 선택된 좌석 정보 수집
+    final selectedSeats = <String>[];
+    for (int row = 0; row < _seatSelected.length; row++) {
+      for (int col = 0; col < _seatSelected[row].length; col++) {
+        if (_seatSelected[row][col]) {
+          final seatLabel =
+              String.fromCharCode(65 + col) + (row + 1).toString();
+          selectedSeats.add(seatLabel);
+        }
+      }
+    }
+
+    // 예매 확인 팝업 띄우기
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (context) => AlertDialog(
+        title: const Text("예매 확인"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "출발역: ${widget.departure}",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              "도착역: ${widget.arrival}",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "선택 좌석: ${selectedSeats.join(', ')}",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              "예매하시겠습니까?",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("취소"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // 확인 팝업 닫기
+              _showBookingComplete(); // 예매 완료 팝업 표시
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
+            child: const Text("예매하기", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showBookingComplete() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
         title: const Text("예매 완료"),
         content: const Text("좌석이 성공적으로 예매되었습니다."),
         actions: [
@@ -90,11 +150,7 @@ class _SeatPageState extends State<SeatPage> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Icon(
-                  Icons.arrow_circle_right,
-                  size: 24,
-                  color: colorScheme.onSurface.withOpacity(0.6),
-                ),
+                Icon(Icons.arrow_circle_right, size: 24, color: Colors.grey),
                 const SizedBox(width: 16),
                 Text(
                   widget.arrival,
@@ -278,7 +334,7 @@ class _SeatPageState extends State<SeatPage> {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: colorScheme.onSurface.withOpacity(0.6),
+            color: colorScheme.onSurface.withAlpha(150),
           ),
         ),
       ),

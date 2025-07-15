@@ -6,8 +6,13 @@ class StationListPage extends StatelessWidget {
   static const String routeName = '/station_list';
 
   final bool isDeparture;
+  final String? excludeStation; // 같은 역 고르지 못하도록
 
-  const StationListPage({super.key, required this.isDeparture});
+  const StationListPage({
+    super.key,
+    required this.isDeparture,
+    this.excludeStation,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,21 +55,31 @@ class StationListPage extends StatelessWidget {
         itemCount: stationList.length,
         itemBuilder: (context, index) {
           final station = stationList[index];
+          final isDisabled = station == excludeStation;
+
           return ListTile(
             title: Text(
               station,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
+                color: isDisabled
+                    ? colorScheme.onSurface.withAlpha(100)
+                    : colorScheme.onSurface,
               ),
             ),
-            onTap: () {
-              Navigator.pop(context, {
-                'isDeparture': isDeparture,
-                'station': station,
-              });
-            },
+            //아래 부분이 같은 역 선택 불가 경고 메시지 띄우는 부분
+            trailing: isDisabled
+                ? Icon(Icons.block, color: colorScheme.onSurface.withAlpha(100))
+                : null,
+            onTap: isDisabled
+                ? null
+                : () {
+                    Navigator.pop(context, {
+                      'isDeparture': isDeparture,
+                      'station': station,
+                    });
+                  },
           );
         },
       ),

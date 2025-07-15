@@ -16,10 +16,21 @@ class _HomePageState extends State<HomePage> {
   String? _arrival;
 
   Future<void> _selectStation(bool isDeparture) async {
+    // 이미 선택된 역이 있는지 확인
+    String? currentStation;
+    if (isDeparture) {
+      currentStation = _departure;
+    } else {
+      currentStation = _arrival;
+    }
+
     final result = await Navigator.pushNamed(
       context,
       StationListPage.routeName,
-      arguments: isDeparture,
+      arguments: {
+        'isDeparture': isDeparture,
+        'excludeStation': isDeparture ? _arrival : _departure,
+      },
     );
 
     if (result is Map) {
@@ -56,7 +67,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Container(
-        color: Colors.grey[400],
+        color: isDark ? Colors.black : Colors.grey[400],
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(

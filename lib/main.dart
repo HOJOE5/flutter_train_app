@@ -31,9 +31,14 @@ class MyApp extends StatelessWidget {
             initialRoute: '/',
             onGenerateRoute: (settings) {
               if (settings.name == StationListPage.routeName) {
-                final isDeparture = settings.arguments as bool;
+                final args = settings.arguments as Map<String, dynamic>;
+                final isDeparture = args['isDeparture'] as bool;
+                final excludeStation = args['excludeStation'] as String?;
                 return MaterialPageRoute(
-                  builder: (_) => StationListPage(isDeparture: isDeparture),
+                  builder: (_) => StationListPage(
+                    isDeparture: isDeparture,
+                    excludeStation: excludeStation,
+                  ),
                 );
               }
 
